@@ -40,7 +40,10 @@ jobs:
           override-ci-command: npm install
       - run:
           name: Run Playwright Tests
-          command: npx playwright test
+          command: npx playwright test --reporter=html
+      - store_artifacts:
+          path: playwright-report
+          destination: e2e-test-report
 workflows:
   build_and_test:
     jobs:
