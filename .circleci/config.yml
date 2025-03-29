@@ -1,11 +1,8 @@
-# This config was automatically generated from your source code
-# Stacks detected: cicd:github-actions:.github/workflows,deps:node:.
 version: 2.1
 orbs:
   node: circleci/node@5
 jobs:
   build-node:
-    # Build node project
     executor: node/default
     steps:
       - checkout
@@ -17,7 +14,6 @@ jobs:
       - run:
           name: Create the ~/artifacts directory if it doesn't exist
           command: mkdir -p ~/artifacts
-      # Copy output to artifacts dir
       - run:
           name: Copy artifacts
           command: cp -R build dist public .output .next .docusaurus ~/artifacts 2>/dev/null || true
@@ -25,21 +21,33 @@ jobs:
           path: ~/artifacts
           destination: node-build
   deploy:
-    # This is an example deploy job, not actually used by the workflow
     docker:
       - image: cimg/base:stable
     steps:
-      # Replace this with steps to deploy to users
       - run:
           name: deploy
           command: '#e.g. ./deploy.sh'
       - run:
           name: found github actions config
           command: ':'
+  test-e2e:
+    docker:
+      - image: mcr.microsoft.com/playwright:bionic
+    steps:
+      - checkout
+      - node/install-packages:
+          cache-path: ~/project/node_modules
+          override-ci-command: npm install
+      - run:
+          name: Run Playwright Tests
+          command: npx playwright test
 workflows:
-  build:
+  build_and_test:
     jobs:
       - build-node
+      - test-e2e:
+          requires:
+            - build-node
     # - deploy:
     #     requires:
     #       - build-node
