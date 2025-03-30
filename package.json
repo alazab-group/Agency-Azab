@@ -51,7 +51,7 @@
 		"vue": "^3.4.34",
 		"vue-dompurify-html": "^5.1.0"
 	},
-	"packageManager": "pnpm@9.6.0",
+	"packageManager": "pnpm@9.15.9",
 	"engines": {
 		"node": ">=18.0.0",
 		"pnpm": ">=8.6.0"
